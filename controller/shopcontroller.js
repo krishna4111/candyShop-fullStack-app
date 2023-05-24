@@ -36,12 +36,62 @@ catch(err){
 }
 }
 
-exports.buyOne=(req,res,next)=>{
+exports.buyOne=async (req,res,next)=>{
     try{
-        const candyId=req.body.id;
+        let newQuantity;
+        const candyId=req.params.id;
+        console.log("candy id", candyId);
         shopmodel.findByPk(candyId)
-        .then(candy=>{
+        .then(async candy=>{
+            console.log("candy detail" , candy);
+            if(candy.quantity>=1){
+                newQuantity=candy.quantity-1;
+              const updated = await candy.update({quantity:newQuantity});
+              res.status(200).json({
+                update:updated
+              })
+            }
+            
+        })
+    }
+    catch(err){
+        console.log(err);
+    }
+}
+exports.buyTwo=(req,res,next)=>{
+    try{
+        let newQuantity;
+        const candyId=req.params.id;
+        shopmodel.findByPk(candyId)
+        .then(async candy=>{
             console.log(candy);
+            if(candy.quantity>=2){
+                newQuantity=candy.quantity-2;
+                const updated = await candy.update({quantity:newQuantity});
+              res.status(200).json({
+                update:updated
+              })
+            }
+        })
+    }
+    catch(err){
+        console.log(err);
+    }
+}
+exports.buyThree=(req,res,next)=>{
+    try{
+        let newQuantity;
+        const candyId=req.params.id;
+        shopmodel.findByPk(candyId)
+        .then(async candy=>{
+            console.log(candy);
+            if(candy.quantity>=3){
+                newQuantity=candy.quantity-3;
+                const updated = await candy.update({quantity:newQuantity});
+              res.status(200).json({
+                update:updated
+              })
+            }
         })
     }
     catch(err){

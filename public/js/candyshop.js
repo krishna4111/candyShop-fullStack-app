@@ -27,6 +27,8 @@ window.addEventListener("DOMContentLoaded",async function getAll(){
        await axios.get('http://localhost:3000/shop/show-all-users')
        .then(result=>{
         //console.log(result.data.allusers.length);
+        console.log(result.data.allusers[0]);
+
         for(var i=0;i<result.data.allusers.length;i++){
             showNewUserOnScreen(result.data.allusers[i]);
         }
@@ -38,22 +40,76 @@ window.addEventListener("DOMContentLoaded",async function getAll(){
 })
   
 function showNewUserOnScreen(obj){
+    console.log(obj.chocolate)
     const parentNode=document.getElementById('showing');
-    const createNewUser=`<li id=${obj.id}> ${obj.chocolate} - ${obj.desc} - ${obj.price} -${obj.quantity}
-    <button style="padding:3px;margin:5px" onclick=reduceByOne('${obj}') class="btn btn-success">Buy One</button>
-    <button style="padding:3px;margin:5px" onclick=reduceByTwo('${obj}') class="btn btn-success">Buy Two</button>
-    <button style="padding:3px;margin:5px" onclick=reduceByThree('${obj}') class="btn btn-success">Buy Three</button>
+    const createNewUser=`<li id=${obj.id}> ${obj.candy} - ${obj.description} - ${obj.price} -${obj.quantity}
+    <button style="padding:3px;margin:5px" onclick=reduceByOne('${obj.id},${obj.id},${obj.id},${obj.id},${obj.id}') class="btn btn-success">Buy One</button>
+    <button style="padding:3px;margin:5px" onclick=reduceByTwo('${obj.id},${obj.id},${obj.id},${obj.id},${obj.id}') class="btn btn-success">Buy Two</button>
+    <button style="padding:3px;margin:5px" onclick=reduceByThree('${obj.id},${obj.id},${obj.id},${obj.id},${obj.id}') class="btn btn-success">Buy Three</button>
         </li>`
 
         parentNode.innerHTML+=createNewUser;
     }
 
-    async function reduceByOne(obj){
-        await axios.put(`http://localhost:3000/shop/buyOne/${obj.id}`)
-        .then(response=>{
-            console.log(response)
-        })
+    async function reduceByOne(id,chocolate,desc,price,quantity){
+        try{
+            await axios.put(`http://localhost:3000/shop/buyOne/${id}`,{
+                chocolate:chocolate,
+                desc:desc,
+                price:price,
+                quantity:quantity-1
+            })
+            //console.log(update)
+            .then(response=>{
+                location.reload();
+                console.log('i am inside')
+                console.log(response)
+            })
+        }
+        catch(err){
+            console.log(err);
+        }
+       
     }
+    async function reduceByTwo(id,chocolate,desc,price,quantity){
+        try{
+            await axios.put(`http://localhost:3000/shop/buyTwo/${id}`,{
+                chocolate:chocolate,
+                    desc:desc,
+                    price:price,
+                    quantity:quantity-2
+            })
+            .then(response=>{
+                location.reload();
+                console.log('i am inside')
+                console.log(response)
+            })
+        }
+       catch(err){
+        console.log(err);
+       }
+        
+    }
+    async function reduceByThree (id,chocolate,desc,price,quantity) {
+        try{
+            await axios.put(`http://localhost:3000/shop/buyThree/${id}`,{
+                chocolate:chocolate,
+                    desc:desc,
+                    price:price,
+                    quantity:quantity-3
+            })
+            .then(response=>{
+                location.reload();
+                console.log('i am inside')
+                console.log(response)
+            })
+        }
+        catch(err){
+            console.log(err);
+        }
+       
+    }
+
        
     
 
